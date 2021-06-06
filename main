@@ -1,0 +1,64 @@
+/* 216554588 Navarro Rizo Bruno Octavio
+   219750507 Hernandez Nieto Fernando
+   212554346 Duron González Jonathan
+   Estructuras de Datos II  D12
+   Lara Lopez Graciela */
+
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
+int main() {
+    
+    struct Prod {
+        string codigo;
+        string nombre;
+        string fabricante;
+        string cantidad;
+        string dia;
+        string mes;
+        string via;
+        string dir;
+        };
+
+    ifstream archivo;
+    archivo.open("Inventario1.txt",ios::in);
+
+    Prod arr[51];
+    Prod miProd;
+
+    while(!archivo.eof()) {
+        getline(archivo,miProd.codigo, ',');
+        miProd.codigo += ',';
+        getline(archivo,miProd.nombre, ',');
+        miProd.nombre += ',';
+        getline(archivo,miProd.fabricante, ',');
+        miProd.fabricante += ',';
+        getline(archivo,miProd.cantidad, ',');
+        miProd.cantidad += ',';
+        getline(archivo,miProd.dia, ',');
+        miProd.dia += ',';
+        getline(archivo,miProd.mes, ',');
+        miProd.mes += ',';
+        getline(archivo,miProd.via, ',');
+        miProd.via += ',';
+        getline(archivo,miProd.dir, '\n');
+
+        arr[stoi(miProd.dir)] = miProd;
+        }
+        
+    archivo.close();
+
+    for(int i = 1; i < 51; i++) {
+        if(i < 10) {
+            cout << "0" << i << " " << arr[i].codigo << arr[i].nombre << arr[i].fabricante
+                 << arr[i].cantidad << arr[i].dia << arr[i].mes << arr[i].via << arr[i].dir << endl;
+            }
+        else {
+            cout << i << " " << arr[i].codigo << arr[i].nombre << arr[i].fabricante
+                 << arr[i].cantidad << arr[i].dia << arr[i].mes << arr[i].via << arr[i].dir << endl;
+            }
+        }
+
+    }
