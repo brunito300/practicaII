@@ -10,7 +10,7 @@
 using namespace std;
 
 int main() {
-    
+
     struct Prod {
         string codigo;
         string nombre;
@@ -27,6 +27,11 @@ int main() {
 
     Prod arr[51];
     Prod miProd;
+    int ind, aux;
+
+    for(int i = 1; i < 51; i++) {
+        arr[i].nombre = "vacio";
+        }
 
     while(!archivo.eof()) {
         getline(archivo,miProd.codigo, ',');
@@ -45,9 +50,19 @@ int main() {
         miProd.via += ',';
         getline(archivo,miProd.dir, '\n');
 
-        arr[stoi(miProd.dir)] = miProd;
+        ind = stoi(miProd.dir);
+        aux = ind;
+
+        while(arr[ind].nombre != "vacio") {
+            ind++;
+            if(ind > 50)
+                ind = 1;
+            }
+        miProd.dir = "-1";
+        arr[aux].dir = to_string(ind);
+        arr[ind] = miProd;
         }
-        
+
     archivo.close();
 
     for(int i = 1; i < 51; i++) {
