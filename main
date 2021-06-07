@@ -10,26 +10,20 @@
 
 using namespace std;
 
-int main() {
-
-    /**Definicion de la struct del producto, usaremos este objeto para
+/**Definicion de la struct del producto, usaremos este objeto para
     guardar la informacion del inventario*/
-    struct Prod {
-        string codigo;
-        string nombre;
-        string fabricante;
-        string cantidad;
-        string dia;
-        string mes;
-        string via;
-        string dir;
-        };
+struct Prod {
+    string codigo;
+    string nombre;
+    string fabricante;
+    string cantidad;
+    string dia;
+    string mes;
+    string via;
+    string dir;
+    };
 
-
-    ///Creamos y abrimos nuestro archivo de lectura
-    ifstream archivo;
-    archivo.open("Inventario1.txt",ios::in);
-
+int main() {
 
     /**Creamos un arreglo de 51 productos, ya que no
     utilizaremos el indice 0. En este arreglo almacenaremos
@@ -40,83 +34,130 @@ int main() {
     para guardar cada linea*/
     Prod miProd;
 
-    /**Ind nos dira cual es el indice del arreglo donde
-    guardaremos el producto.
-    aux solo es un auxiliar*/
-    int ind, aux;
+    ///Menu
+    int op;
+    do {
+        system("cls");
+        cout << endl << "1) Ejecutar y mostrar en pantalla" << endl << "2) Salir"
+             << endl <<"Opcion:    _";
+        cin >> op;
 
-    ///Llenamos el arreglo de espacios
-    for(int i = 1; i < 51; i++)
-        arr[i].nombre = " ";
+        if(op == 1) {
+            system("cls");
 
-    /**Leemos cada linea del inventario y lo guardamos en cada
-    campo de miProd, gracias al separador de campo (','), hacemos
-    esto hasta que se encuentre un salto de linea, lo cual indica que
-    se salta al siguiente registro.
-    Tambien, agregamos la coma al final de cada campo, para poder
-    reutilizarla como separador*/
-    while(!archivo.eof()) {
-        getline(archivo,miProd.codigo, ',');
-        miProd.codigo += ',';
-        getline(archivo,miProd.nombre, ',');
-        miProd.nombre += ',';
-        getline(archivo,miProd.fabricante, ',');
-        miProd.fabricante += ',';
-        getline(archivo,miProd.cantidad, ',');
-        miProd.cantidad += ',';
-        getline(archivo,miProd.dia, ',');
-        miProd.dia += ',';
-        getline(archivo,miProd.mes, ',');
-        miProd.mes += ',';
-        getline(archivo,miProd.via, ',');
-        miProd.via += ',';
-        getline(archivo,miProd.dir, '\n');
+            ///Creamos y abrimos nuestro archivo de lectura
+            ifstream archivo;
+            archivo.open("Inventario1.txt",ios::in);
 
-        ///Convertimos a entero el campo liga
-        ind = stoi(miProd.dir);
-        ///Guardamos la direccion en el auxiliar
-        aux = ind;
+            /**Ind nos dira cual es el indice del arreglo donde
+            guardaremos el producto.
+            aux solo es un auxiliar*/
+            int ind, aux;
 
-        /**Si el arreglo esta ocupado en el indice que queremos ingresar un nuevo
-        dato, el indice incrementa hasta encontrar un lugar vacio, esta comparacion
-        la realizamos buscando el espacio en blanco con el que llenamos el arreglo*/
-        while(arr[ind].nombre != " ") {
-            ind++;
+            ///Llenamos el arreglo de espacios
+            for(int i = 1; i < 51; i++)
+                arr[i].nombre = " ";
 
-            ///Si el indice se sobrepasa de 50, regresa al 1
-            if(ind > 50)
-                ind = 1;
+            /**Leemos cada linea del inventario y lo guardamos en cada
+            campo de miProd, gracias al separador de campo (','), hacemos
+            esto hasta que se encuentre un salto de linea, lo cual indica que
+            se salta al siguiente registro.
+            Tambien, agregamos la coma al final de cada campo, para poder
+            reutilizarla como separador*/
+            while(!archivo.eof()) {
+                getline(archivo,miProd.codigo, ',');
+                miProd.codigo += ',';
+                getline(archivo,miProd.nombre, ',');
+                miProd.nombre += ',';
+                getline(archivo,miProd.fabricante, ',');
+                miProd.fabricante += ',';
+                getline(archivo,miProd.cantidad, ',');
+                miProd.cantidad += ',';
+                getline(archivo,miProd.dia, ',');
+                miProd.dia += ',';
+                getline(archivo,miProd.mes, ',');
+                miProd.mes += ',';
+                getline(archivo,miProd.via, ',');
+                miProd.via += ',';
+                getline(archivo,miProd.dir, '\n');
+
+                ///Convertimos a entero el campo liga
+                ind = stoi(miProd.dir);
+                ///Guardamos la direccion en el auxiliar
+                aux = ind;
+
+                /**Si el arreglo esta ocupado en el indice que queremos ingresar un nuevo
+                dato, el indice incrementa hasta encontrar un lugar vacio, esta comparacion
+                la realizamos buscando el espacio en blanco con el que llenamos el arreglo*/
+                while(arr[ind].nombre != " ") {
+                    ind++;
+
+                    ///Si el indice se sobrepasa de 50, regresa al 1
+                    if(ind > 50)
+                        ind = 1;
+                    }
+
+                ///Cambiamos el campo liga del producto a insertar, para que apunte a nulo
+                miProd.dir = "-1";
+
+                /**Con este condicional evaluamos si existe mas de una colision, en cuyo caso
+                cambiamos el valor de aux*/
+                if(arr[aux].dir != "-1") {
+                    stringstream intValue(arr[aux].dir);
+                    intValue >> aux;
+                    }
+
+                /**Cambiamos el campo liga del elemento que ocupa el espacio, para que apunte al
+                nuevo elemento*/
+                arr[aux].dir = to_string(ind);
+
+                ///Guardamos el producto en el lugar que le corresponde
+                arr[ind] = miProd;
+                }
+
+            ///Cerramos el archivo
+            archivo.close();
+
+            ///Ciclos para la impresion de datos
+            for(int i = 1; i < 51; i++)
+                ///Agrega un 0 a la izquierda del 1 al 9
+                if(i < 10) {
+                    cout << "0" << i << " " << arr[i].codigo << arr[i].nombre << arr[i].fabricante
+                         << arr[i].cantidad << arr[i].dia << arr[i].mes << arr[i].via << arr[i].dir << endl;
+                    }
+                else {
+                    cout << i << " " << arr[i].codigo << arr[i].nombre << arr[i].fabricante
+                         << arr[i].cantidad << arr[i].dia << arr[i].mes << arr[i].via << arr[i].dir << endl;
+                    }
+            cout << endl << endl;
+            system("pause");
             }
 
-        ///Cambiamos el campo liga del producto a insertar, para que apunte a nulo
-        miProd.dir = "-1";
+        ///Escribimos el archivo y salimos del programa
+        else if(op == 2) {
+            system("cls");
 
-        /**Con este condicional evaluamos si existe mas de una colision, en cuyo caso
-        cambiamos el valor de aux*/
-        if(arr[aux].dir != "-1") {
-            stringstream intValue(arr[aux].dir);
-            intValue >> aux;
+            ///Archivo de salida
+            ofstream archivoS;
+            archivoS.open("HASH_SAT_PRO.txt",ios::out);
+
+            ///Ciclos para la escritura de datos
+            for(int i = 1; i < 51; i++)
+                ///Agrega un 0 a la izquierda del 1 al 9
+                if(i < 10) {
+                    archivoS << "0" << i << " " << arr[i].codigo << arr[i].nombre << arr[i].fabricante
+                             << arr[i].cantidad << arr[i].dia << arr[i].mes << arr[i].via << arr[i].dir << endl;
+                    }
+                else {
+                    archivoS << i << " " << arr[i].codigo << arr[i].nombre << arr[i].fabricante
+                             << arr[i].cantidad << arr[i].dia << arr[i].mes << arr[i].via << arr[i].dir << endl;
+                    }
+
+            archivoS.close();
+
+            cout << endl << endl << endl << "\t\t\tGracias por usar el programa :)" << endl << endl << endl;
+            exit(1);
             }
-
-        /**Cambiamos el campo liga del elemento que ocupa el espacio, para que apunte al
-        nuevo elemento*/
-        arr[aux].dir = to_string(ind);
-
-        ///Guardamos el producto en el lugar que le corresponde
-        arr[ind] = miProd;
         }
-
-    ///Cerramos el archivo
-    archivo.close();
-
-    ///Ciclos para la impresion de datos (provisional)
-    for(int i = 1; i < 51; i++)
-        if(i < 10) {
-            cout << "0" << i << " " << arr[i].codigo << arr[i].nombre << arr[i].fabricante
-                 << arr[i].cantidad << arr[i].dia << arr[i].mes << arr[i].via << arr[i].dir << endl;
-            }
-        else {
-            cout << i << " " << arr[i].codigo << arr[i].nombre << arr[i].fabricante
-                 << arr[i].cantidad << arr[i].dia << arr[i].mes << arr[i].via << arr[i].dir << endl;
-            }
+    while(true);
     }
