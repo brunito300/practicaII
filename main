@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -89,6 +90,13 @@ int main() {
 
         ///Cambiamos el campo liga del producto a insertar, para que apunte a nulo
         miProd.dir = "-1";
+
+        /**Con este condicional evaluamos si existe mas de una colision, en cuyo caso
+        cambiamos el valor de aux*/
+        if(arr[aux].dir != "-1") {
+            stringstream intValue(arr[aux].dir);
+            intValue >> aux;
+            }
 
         /**Cambiamos el campo liga del elemento que ocupa el espacio, para que apunte al
         nuevo elemento*/
