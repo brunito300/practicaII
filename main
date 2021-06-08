@@ -1,44 +1,55 @@
 /* 216554588 Navarro Rizo Bruno Octavio
-   219750507 Hernandez Nieto Fernando
-   212554346 Duron González Jonathan
+   212554346 Duron Gonzalez Jonathan
    Estructuras de Datos II  D12
    Lara Lopez Graciela */
 
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <conio.h>
 
 using namespace std;
 
-///Funcion para rellenar nuestros arreglos con espacios
+///Funcion para rellenar un arreglo de caracteres con espacios
 void rellenar(char arr[],int lon) {
     for(int i = 0; i < lon; i++) {
         arr[i] = ' ';
         }
     }
 
-///Funcion para reescrbir los arreglos
-void escribir(char arr[], string str) {
+///Funcion para reescribir los espacios vacios del arreglo
+void escribir(char arr[], string str, int lon) {
     for(unsigned int i = 0; i < str.length(); i++) {
         arr[i] = str[i];
         }
+        ///Aqui agregamos los separadores de campo
+        if(lon > 3)
+        arr[lon-1] = ',';
     }
 
 ///Funcion para imprimir arreglos
-string imprimir(char arr[],int lon) {
+string imprimir(char arr[],int lon, bool flag) {
     stringstream res;
-    string aux;
-    for(int i = 0; i < lon; i++) {
-        res << arr[i];
+    if(flag == true){
+        for(int i = 0; i < lon; i++) {
         cout << arr[i];
         }
-    aux = res.str();
-    return aux;
+    }
+    else{
+        for(int i = 0; i < lon; i++) {
+        res << arr[i];
+        }
+    }
+
+
+    return res.str();
     }
 
 /**Definicion de la struct del producto, usaremos este objeto para
     guardar la informacion del inventario, lo manejamos con arreglos
-    para que sean de longitud fija*/
+    para que sean de longitud fija, pero tambien strings para manejarlo
+    mas facil*/
+
 struct Prod {
     char codigoC[15];
     char nombreC[15];
@@ -98,7 +109,7 @@ int main() {
                 for(int i = 1; i < 51; i++){
                     arr[i].nombreS = " ";
 
-                ///Rellenamos miProd con espacio vacio
+                ///Rellenamos arreglo con espacio vacio
                     rellenar(arr[i].codigoC,sizeof(arr[i].codigoC));
                     rellenar(arr[i].nombreC,sizeof(arr[i].nombreC));
                     rellenar(arr[i].fabricanteC,sizeof(arr[i].fabricanteC));
@@ -129,27 +140,29 @@ int main() {
                     rellenar(miProd.dirC,sizeof(miProd.dirC));
 
                     getline(archivo,miProd.codigoS, ',');
-                    miProd.codigoS += ',';
+                    //miProd.codigoS += ',';
 
                     getline(archivo,miProd.nombreS, ',');
-                    miProd.nombreS += ',';
+                    //miProd.nombreS += ',';
 
                     getline(archivo,miProd.fabricanteS, ',');
-                    miProd.fabricanteS += ',';
+                    //miProd.fabricanteS += ',';
 
                     getline(archivo,miProd.cantidadS, ',');
-                    miProd.cantidadS += ',';
+                    //miProd.cantidadS += ',';
 
                     getline(archivo,miProd.diaS, ',');
-                    miProd.diaS += ',';
+                    //miProd.diaS += ',';
 
                     getline(archivo,miProd.mesS, ',');
-                    miProd.mesS += ',';
+                    //miProd.mesS += ',';
 
                     getline(archivo,miProd.viaS, ',');
-                    miProd.viaS += ',';
+                    //miProd.viaS += ',';
 
                     getline(archivo,miProd.dirS, '\n');
+
+                    ///Hasta este punto tenemos una instancia de un producto con todos sus campos
 
                     ///Convertimos a entero el campo liga
                     ind = stoi(miProd.dirS);
@@ -159,7 +172,7 @@ int main() {
                     /**Si el arreglo esta ocupado en el indice que queremos ingresar un nuevo
                     dato, el indice incrementa hasta encontrar un lugar vacio, esta comparacion
                     la realizamos buscando el espacio en blanco con el que llenamos el arreglo*/
-                    while(arr[ind].nombreS!= " ") {
+                    while(arr[ind].nombreS != " ") {
                         ind++;
 
                         ///Si el indice se sobrepasa de 50, regresa al 1
@@ -169,6 +182,7 @@ int main() {
 
                     ///Cambiamos el campo liga del producto a insertar, para que apunte a nulo
                     miProd.dirS = "-1";
+                    escribir(miProd.dirC,miProd.dirS,sizeof(miProd.dirC));
 
                     /**Con este condicional evaluamos si existe mas de una colision, en cuyo caso
                     cambiamos el valor de aux*/
@@ -180,16 +194,17 @@ int main() {
                     /**Cambiamos el campo liga del elemento que ocupa el espacio, para que apunte al
                     nuevo elemento*/
                     arr[aux].dirS = to_string(ind);
+                    rellenar(arr[aux].dirC,sizeof(arr[aux].dirC));
+                    escribir(arr[aux].dirC,to_string(ind),sizeof(arr[aux].dirC));
 
                     ///Sobreescribimos miProd
-                    escribir(miProd.codigoC,miProd.codigoS);
-                    escribir(miProd.nombreC,miProd.nombreS);
-                    escribir(miProd.fabricanteC,miProd.fabricanteS);
-                    escribir(miProd.cantidadC,miProd.cantidadS);
-                    escribir(miProd.diaC,miProd.diaS);
-                    escribir(miProd.mesC,miProd.mesS);
-                    escribir(miProd.viaC,miProd.viaS);
-                    escribir(miProd.dirC,miProd.dirS);
+                    escribir(miProd.codigoC,miProd.codigoS,sizeof(miProd.codigoC));
+                    escribir(miProd.nombreC,miProd.nombreS,sizeof(miProd.nombreC));
+                    escribir(miProd.fabricanteC,miProd.fabricanteS,sizeof(miProd.fabricanteC));
+                    escribir(miProd.cantidadC,miProd.cantidadS,sizeof(miProd.cantidadC));
+                    escribir(miProd.diaC,miProd.diaS,sizeof(miProd.diaC));
+                    escribir(miProd.mesC,miProd.mesS,sizeof(miProd.mesC));
+                    escribir(miProd.viaC,miProd.viaS,sizeof(miProd.viaC));
 
                     ///Guardamos el producto en el lugar que le corresponde
                     arr[ind] = miProd;
@@ -202,26 +217,26 @@ int main() {
                 for(int i = 1; i < 51; i++) {
                     if(i < 10) {
                         cout << "0" << i << " ";
-                        imprimir(arr[i].codigoC,sizeof(arr[i].codigoC));
-                        imprimir(arr[i].nombreC,sizeof(arr[i].nombreC));
-                        imprimir(arr[i].fabricanteC,sizeof(arr[i].fabricanteC));
-                        imprimir(arr[i].cantidadC,sizeof(arr[i].cantidadC));
-                        imprimir(arr[i].diaC,sizeof(arr[i].diaC));
-                        imprimir(arr[i].mesC,sizeof(arr[i].mesC));
-                        imprimir(arr[i].viaC,sizeof(arr[i].viaC));
-                        imprimir(arr[i].dirC,sizeof(arr[i].dirC));
+                        imprimir(arr[i].codigoC,sizeof(arr[i].codigoC),true);
+                        imprimir(arr[i].nombreC,sizeof(arr[i].nombreC),true);
+                        imprimir(arr[i].fabricanteC,sizeof(arr[i].fabricanteC),true);
+                        imprimir(arr[i].cantidadC,sizeof(arr[i].cantidadC),true);
+                        imprimir(arr[i].diaC,sizeof(arr[i].diaC),true);
+                        imprimir(arr[i].mesC,sizeof(arr[i].mesC),true);
+                        imprimir(arr[i].viaC,sizeof(arr[i].viaC),true);
+                        imprimir(arr[i].dirC,sizeof(arr[i].dirC),true);
                         cout << endl;
                         }
                     else {
                         cout << i << " ";
-                        imprimir(arr[i].codigoC,sizeof(arr[i].codigoC));
-                        imprimir(arr[i].nombreC,sizeof(arr[i].nombreC));
-                        imprimir(arr[i].fabricanteC,sizeof(arr[i].fabricanteC));
-                        imprimir(arr[i].cantidadC,sizeof(arr[i].cantidadC));
-                        imprimir(arr[i].diaC,sizeof(arr[i].diaC));
-                        imprimir(arr[i].mesC,sizeof(arr[i].mesC));
-                        imprimir(arr[i].viaC,sizeof(arr[i].viaC));
-                        imprimir(arr[i].dirC,sizeof(arr[i].dirC));
+                        imprimir(arr[i].codigoC,sizeof(arr[i].codigoC),true);
+                        imprimir(arr[i].nombreC,sizeof(arr[i].nombreC),true);
+                        imprimir(arr[i].fabricanteC,sizeof(arr[i].fabricanteC),true);
+                        imprimir(arr[i].cantidadC,sizeof(arr[i].cantidadC),true);
+                        imprimir(arr[i].diaC,sizeof(arr[i].diaC),true);
+                        imprimir(arr[i].mesC,sizeof(arr[i].mesC),true);
+                        imprimir(arr[i].viaC,sizeof(arr[i].viaC),true);
+                        imprimir(arr[i].dirC,sizeof(arr[i].dirC),true);
                         cout << endl;
                         }
                     }
@@ -242,26 +257,26 @@ int main() {
                 for(int i = 1; i < 51; i++) {
                     if(i < 10) {
                         archivoS << "0" << i << " ";
-                        archivoS << imprimir(arr[i].codigoC,sizeof(arr[i].codigoC));
-                        archivoS << imprimir(arr[i].nombreC,sizeof(arr[i].nombreC));
-                        archivoS << imprimir(arr[i].fabricanteC,sizeof(arr[i].fabricanteC));
-                        archivoS << imprimir(arr[i].cantidadC,sizeof(arr[i].cantidadC));
-                        archivoS << imprimir(arr[i].diaC,sizeof(arr[i].diaC));
-                        archivoS << imprimir(arr[i].mesC,sizeof(arr[i].mesC));
-                        archivoS << imprimir(arr[i].viaC,sizeof(arr[i].viaC));
-                        archivoS << imprimir(arr[i].dirC,sizeof(arr[i].dirC));
+                        archivoS << imprimir(arr[i].codigoC,sizeof(arr[i].codigoC),false);
+                        archivoS << imprimir(arr[i].nombreC,sizeof(arr[i].nombreC),false);
+                        archivoS << imprimir(arr[i].fabricanteC,sizeof(arr[i].fabricanteC),false);
+                        archivoS << imprimir(arr[i].cantidadC,sizeof(arr[i].cantidadC),false);
+                        archivoS << imprimir(arr[i].diaC,sizeof(arr[i].diaC),false);
+                        archivoS << imprimir(arr[i].mesC,sizeof(arr[i].mesC),false);
+                        archivoS << imprimir(arr[i].viaC,sizeof(arr[i].viaC),false);
+                        archivoS << imprimir(arr[i].dirC,sizeof(arr[i].dirC),false);
                         archivoS << endl;
                         }
                     else {
                         archivoS << i << " ";
-                        archivoS << imprimir(arr[i].codigoC,sizeof(arr[i].codigoC));
-                        archivoS << imprimir(arr[i].nombreC,sizeof(arr[i].nombreC));
-                        archivoS << imprimir(arr[i].fabricanteC,sizeof(arr[i].fabricanteC));
-                        archivoS << imprimir(arr[i].cantidadC,sizeof(arr[i].cantidadC));
-                        archivoS << imprimir(arr[i].diaC,sizeof(arr[i].diaC));
-                        archivoS << imprimir(arr[i].mesC,sizeof(arr[i].mesC));
-                        archivoS << imprimir(arr[i].viaC,sizeof(arr[i].viaC));
-                        archivoS << imprimir(arr[i].dirC,sizeof(arr[i].dirC));
+                        archivoS << imprimir(arr[i].codigoC,sizeof(arr[i].codigoC),false);
+                        archivoS << imprimir(arr[i].nombreC,sizeof(arr[i].nombreC),false);
+                        archivoS << imprimir(arr[i].fabricanteC,sizeof(arr[i].fabricanteC),false);
+                        archivoS << imprimir(arr[i].cantidadC,sizeof(arr[i].cantidadC),false);
+                        archivoS << imprimir(arr[i].diaC,sizeof(arr[i].diaC),false);
+                        archivoS << imprimir(arr[i].mesC,sizeof(arr[i].mesC),false);
+                        archivoS << imprimir(arr[i].viaC,sizeof(arr[i].viaC),false);
+                        archivoS << imprimir(arr[i].dirC,sizeof(arr[i].dirC),false);
                         archivoS << endl;
                         }
                     }
